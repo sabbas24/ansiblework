@@ -1,0 +1,50 @@
+- name: install_prerequisites
+  hosts: server
+  become: yes
+  become_user: root
+  gather_facts: false
+  vars:
+    - ansible_ssh_user: ubuntu
+  tasks:
+    - name: install_webserver
+      raw: apt update && apt install nginx -y
+
+    - name: add_key
+      apt_key:
+        url: "https://www.dotdeb.org/dotdeb.gpg"
+        state: present
+      when: php_use_custom_repository
+      register: php_key_installed
+
+    - name: add php apt repository
+      apt_repository:
+        repo: 'deb http://packages.dotdeb.org jessie all'
+        state: present
+        filename: php"
+        update_cache: yes
+
+    - name: set_fact 
+      set_fact:
+        php_packages:
+          - php7.2-fpm
+          - php7.2-cli
+          - php7.2-common
+          - php7.2-dev
+          - php7.2-opcache
+          - php7.2-mbstring
+          - php7.2-memcached
+          - php7.2-mysql
+          - php7.2-redis
+          - php7.2-curl
+          - php7.2-json
+          - php7.2-xsl
+          - php7.2-xml
+          - php7.2-mongodb
+          - php7.2-imagick
+
+    - name: debug
+      package:
+        name: "{{item}}"
+        state: present
+      loop: "{{php_packages}}"
+

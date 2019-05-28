@@ -1,0 +1,19 @@
+---
+- name: install_prerequisites
+  hosts: nginx
+  become: yes
+  become_user: root
+  gather_facts: false
+  vars:
+    - ansible_ssh_user: ubuntu
+  tasks:
+    - name: install_python
+      raw: apt update && apt install python-minimal -y
+
+- name: hello_world
+  hosts: nginx
+  vars:
+    - ansible_ssh_user: ubuntu
+  tasks:
+    - name: print_hello
+      debug: msg="hello world" 

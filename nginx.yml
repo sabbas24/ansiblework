@@ -1,0 +1,31 @@
+---
+- hosts: pysqlserver
+  become: yes
+  become_user: root
+  gather_facts: false
+  vars:
+    - ansible_ssh_user: ubuntu
+  tasks:
+    - name: ensure nginx is at the latest version and update_cache is the equivalent of apt update
+      apt:
+        name: nginx
+        state: latest
+        update_cache: yes
+
+    - name: start nginx
+      service:
+        name: nginx
+        state: started
+
+    - name: Install PHP
+      apt:
+        name: php
+        state: latest
+        update_cache: yes
+
+    - name: install_python
+      apt:
+        name: python-minimal
+        state: latest
+        update_cache: yes
+

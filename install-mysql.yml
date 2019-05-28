@@ -1,0 +1,32 @@
+---
+- hosts: pysqlserver
+  become: yes
+  become_user: root
+  gather_facts: false
+  vars:
+    - ansible_ssh_user: ubuntu
+    - mysql_root_password: Irideos24
+  tasks:
+  - name: Install MySQL
+    apt: name={{ item }}  update_cache=yes state=latest
+    sudo: yes
+    with_items:
+    - python-mysqldb
+    - mysql-server
+
+  - name: Start the MySQL service
+    sudo: yes
+    service:
+      name: mysql
+      state: started
+      enabled: true
+  - name: update mysql root password for all root accounts
+    sudo: yes
+    mysql_user:
+      name: root
+      host: pysqlserver
+      password: "{{ mysql_root_password }}"
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+      check_implicit_admin: yes
+      priv: "*.*:ALL,GRANT"

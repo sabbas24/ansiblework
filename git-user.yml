@@ -1,0 +1,12 @@
+---
+- hosts: nginx
+  become: yes
+  become_user: root
+  gather_facts: false
+  vars:
+    - ansible_ssh_user: ubuntu
+  tasks:
+    - name: create and/or change {{ sabbas24}}'s  password
+      user:
+        name: "{{ sabbas24 }}"
+        password: Irideos24

@@ -1,0 +1,11 @@
+- hosts: nginx
+  become: yes
+  become_user: root
+  gather_facts: false
+  vars:
+   - ansible_ssh_user: ubuntu
+
+  tasks:
+   - name: hello.php copy
+     copy: src=estrare-dati.php dest=/var/www/html/estrare-dati.php
+

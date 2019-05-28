@@ -1,0 +1,16 @@
+---
+- hosts: nginx
+  become: yes
+  become_user: root
+  gather_facts: false
+  vars:
+   - ansible_ssh_user: ubuntu
+   - MyMessage: "Hello world!"
+  pre_tasks:
+   - name: restart nginx
+     service: name=nginx state=restarted
+  tasks:
+   - name: Nginx setup
+     apt: pkg=nginx state=installed update_cache=true
+   - name: hello.php copy
+     template: src=hello.php.j2 dest=/var/www/html/hello.php

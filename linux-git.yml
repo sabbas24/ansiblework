@@ -1,0 +1,11 @@
+---
+- name: Install Git
+  hosts: nginx
+  become: yes
+  become_user: root
+  gather_facts: false
+  vars:
+    - ansible_ssh_user: ubuntu
+  tasks:
+    - name: install_webserver
+      raw: apt update && apt install git-core -y
